@@ -45,4 +45,4 @@ If your skill only makes sense for a specific workflow, it's a marketplace candi
 
 ---
 
-> **Personal fork note:** I'm using this primarily for local automation experiments. Upstream PRs from this fork are unlikely — this is a learning/tinkering copy.
+> **Personal fork note:** I'm using this primarily for local automation experiments. Upstream PRs from this fork are unlikely — this is a learning/tinkering copy. Current focus: building skills for local file management and terminal workflow automation.
