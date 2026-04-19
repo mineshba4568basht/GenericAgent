@@ -25,7 +25,7 @@ mem_dir = os.path.join(script_dir, 'memory')
 if not os.path.exists(mem_dir): os.makedirs(mem_dir)
 mem_txt = os.path.join(mem_dir, 'global_mem.txt')
 # Use a more descriptive header that includes creation date for easier tracking
-if not os.path.exists(mem_txt): open(mem_txt, 'w', encoding='utf-8').write(f'# [Global Memory - L2] (created {time.strftime("%Y-%m-%d")}))\n')
+if not os.path.exists(mem_txt): open(mem_txt, 'w', encoding='utf-8').write(f'# [Global Memory - L2] (created {time.strftime("%Y-%m-%d")})\n')
 mem_insight = os.path.join(mem_dir, 'global_mem_insight.txt')
 if not os.path.exists(mem_insight):
     t = os.path.join(script_dir, f'assets/global_mem_insight_template{lang_suffix}.txt')
@@ -40,6 +40,8 @@ if not os.path.exists(cdp_cfg):
 def get_system_prompt():
     with open(os.path.join(script_dir, f'assets/sys_prompt{lang_suffix}.txt'), 'r', encoding='utf-8') as f: prompt = f.read()
     prompt += f"\nToday: {time.strftime('%Y-%m-%d %a')}\n"
+    # Also include current time so the agent has better temporal context
+    prompt += f"Current time: {time.strftime('%H:%M')}\n"
     prompt += get_global_memory()
     return prompt
 
@@ -51,5 +53,4 @@ class GeneraticAgent:
         llm_sessions = []
         for k, cfg in mykeys.items():
             if not any(x in k for x in ['api', 'config', 'cookie']): continue
-            try:
-                if 'native' in k and 'claude' in k: llm_sessions += [NativeToolClient(NativeClaudeSession(cfg=cfg))
+            
