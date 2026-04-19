@@ -18,8 +18,6 @@ TOOL_SCHEMAS = [
             },
             "required": ["url"]
         }
-    },
-    {
         "name": "click",
         "description": "Click on an element identified by a CSS selector or XPath.",
         "parameters": {
@@ -82,10 +80,12 @@ TOOL_SCHEMAS = [
 
 
 class BrowserTools:
-    """Wraps TMWebDriver. expose browser actions as agent-callable tools."""
+    """Wraps TMWebDriver. Exposes browser actions as agent-callable tools."""
 
     def __init__(self, session: Session):
-        self str) -> str:
+        self.session = session
+
+    def navigate(self, url: str) -> str:
         """Navigate to a URL and return confirmation."""
         self.session.url = url
         return f"Navigated to {url}"
@@ -95,7 +95,7 @@ class BrowserTools:
         try:
             el = self.session.find(selector)
             el.click()
-            return f"Clicked element: {selector}"
+            return f"}"
         except Exception as e:
             return f"Failed to click '{selector}': {e}"
 
@@ -111,21 +111,12 @@ class BrowserTools:
             return f"Failed to type into '{selector}': {e}"
 
     def get_page_content(self, as_html: bool = False) -> str:
-        """Return page content as plain text or HTML."""
-        try:
-            if as_html:
-                return self.session.driver.page_source
-            return self.session.driver.find_element("tag name", "body").text
-        except Exception as e:
-            return f"Failed to get page content: {e}"
+        """Get the current page content as text or HTML."""
+        if as_html:
+            return self.session.page_source
+        # Return visible text; strip excessive whitespace for cleaner output
+        return self.session.find('body').text.strip()
 
     def get_current_url(self) -> str:
-        """Return the current browser URL."""
+        """Return the current URL."""
         return self.session.url
-
-    def dispatch(self, tool_name: str, args: dict) -> str:
-        """ name with given arguments."""
-        method = getattr(self, tool_name, None)
-        if method is None:
-            return f"Unknown tool: {tool_name}"
-        return method(**args)
