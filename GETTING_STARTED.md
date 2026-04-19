@@ -155,9 +155,15 @@ python3 agentmain.py
 Agent 启动后，只需要一句话，它就会自己搞定所有依赖：
 
 ```
-请查看你的代码，安装所有用得上的 python 依赖
+请查看你的代码，安装所有
 ```
 
-Agent 会自己读代码、找出需要的包、全部装好。
+---
 
-> ⚠️ 如果遇到网络问题导致 Agent 无法调用
+## 5. 常见问题
+
+**Q：运行后报 `ModuleNotFoundError`？**
+先执行第 4 步让 Agent 自动安装依赖，或手动 `pip install -r requirements.txt`（如果项目有的话）。
+
+**Q：`mykey.py` 填好了但提示 API 错误？**
+检查 `apibase` 末尾不要多加斜杠（`/`），密钥前后不要有多余空格。
