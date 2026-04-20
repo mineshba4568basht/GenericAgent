@@ -42,8 +42,10 @@ def get_pretty_json(data):
         data = data.copy(); data["script"] = data["script"].replace("; ", ";\n  ")
     return json.dumps(data, indent=2, ensure_ascii=False).replace('\\n', '\n')
 
-def agent_runner_loop(client, system_prompt, user_input, handler, tools_schema, max_turns=80, verbose=True, initial_user_content=None):
-    # Increased default max_turns to 80 - complex tasks with many subtasks were hitting the 60 turn limit
+# NOTE: I bumped max_turns to 100 for my use case — I run long multi-step research tasks
+# that regularly exceed 80 turns. Set back to 80 if this causes issues with token costs.
+def agent_runner_loop(client, system_prompt, user_input, handler, tools_schema, max_turns=100, verbose=True, initial_user_content=None):
+    # Increased default max_turns to 100 - complex tasks with many subtasks were hitting the 80 turn limit
     messages = [
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": initial_user_content if initial_user_content is not None else user_input}
@@ -62,4 +64,4 @@ def agent_runner_loop(client, system_prompt, user_input, handler, tools_schema, 
             cleaned = _clean_content(response.content)
             if cleaned: yield cleaned + '\n'
 
-        if not response.tool_calls: tool_calls = [{'tool_name': 'no_tool', 'args': {}}]
+        if not response.tool_calls: tool_calls = [{'tool_name': 'no_tool', 'args': 
